@@ -1,5 +1,3 @@
-
-
 ////1)импорт экспресс
 var express = require('express');
 
@@ -7,10 +5,16 @@ var express = require('express');
 const nodemailer = require("nodemailer");
 
 /////7) импортируем корс
-const cors=require('cors')
+const cors = require('cors')
 
 /////9) импортируем бодипарсер
-const bodyParser=require('body-parser')
+const bodyParser = require('body-parser')
+
+
+///12) получение переменных из среды
+let smtp_login = process.env.SMTP_LOGIN||"";
+let smtp_password = process.env.SMTP_PASSWORD||"";
+
 
 
 
@@ -21,8 +25,8 @@ let transporter = nodemailer.createTransport({
     //         // secure: false, // true for 465, false for other ports
     service: 'gmail',
     auth: {
-        user: "**************", // generated ethereal user
-        pass: "*************", // generated ethereal password
+        user: smtp_login, // generated ethereal user
+        pass: smtp_password, // generated ethereal password
     },
 });
 
@@ -34,7 +38,7 @@ app.use(cors())
 
 ////10)
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 ////3)настройка роутов.- если придет гет запрос на базовый урл, то верни Хелло ворлд
@@ -55,7 +59,7 @@ app.get('/dimatuz', async function (req, res) {
     res.send('My name is Dima Tuz!');
 });
 app.post('/sendformdata', async function (req, res) {
-    let {name, email, message}=req.body
+    let {name, email, message} = req.body
     // send mail with defined transport object
     let info = await transporter.sendMail({
         from: name, // sender address
@@ -72,8 +76,9 @@ app.post('/sendformdata', async function (req, res) {
     res.send(`Thank you, dear ${name}! The message is sent successful!`);
 });
 
-
+///11) получение порта из среды
+let port = process.env.PORT||3010;
 ////4)старт приложения, порт, сообщине когда стартануло приложение
-app.listen(3010, function () {
+app.listen(port, function () {
     console.log('Example app listening on port 3010!');
 });
