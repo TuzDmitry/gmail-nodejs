@@ -12,8 +12,8 @@ const bodyParser = require('body-parser')
 
 
 ///12) получение переменных из среды
-let smtp_login = process.env.SMTP_LOGIN||"";
-let smtp_password = process.env.SMTP_PASSWORD||"";
+let smtp_login = process.env.SMTP_LOGIN;
+let smtp_password = process.env.SMTP_PASSWORD;
 
 
 
